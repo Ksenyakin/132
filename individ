@@ -1,0 +1,129 @@
+///Main
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+
+        Array[] arrays=new Array[3];
+        
+        for (int i = 0; i < 3; i++) {
+            System.out.println("enter 1 if u need Or Array, something other if u need And Array");
+            if(in.nextInt()==1) {
+                System.out.println("and sam massiv");
+                double[] array=new double[6];
+                for (int j = 0; j < 6; j++) {
+                    array[j]= in.nextDouble();
+                }
+                arrays[i]=new OrArray(array);
+            }
+            else {
+                System.out.println("and sam massiv");
+                double[] array=new double[6];
+                for (int j = 0; j < 6; j++) {
+                    array[j]= in.nextDouble();
+                }
+                arrays[i]=new AndArray(array);
+            }
+        }
+        System.out.println(Arrays.toString(arrays[0].sum(arrays[1].getData())));
+    }
+}
+
+
+///OrArray
+public class OrArray implements Array{
+    double[] elems;
+
+    public OrArray(double[] elems) {
+        this.elems = elems;
+    }
+
+    @Override
+    public double[] sum(double[] array) {
+        double[] resultArray=new double[array.length+ elems.length];
+        for (int i = 0; i < resultArray.length; i++) {
+            if(i< elems.length){
+                resultArray[i]=elems[i];
+                continue;
+            }
+            resultArray[i]=array[i - elems.length];
+        }
+        return resultArray;
+    }
+
+    @Override
+    public void obrabotka() {
+        for (int i = 0; i < elems.length; i++) {
+            elems[i]=Math.log(elems[i]);
+        }
+    }
+
+    @Override
+    public double[] getData() {
+        return elems;
+    }
+}
+
+
+///interface_Array
+public interface Array {
+        double[] sum(double[] array);
+
+        void obrabotka();
+        double[] getData();
+
+}
+
+
+///AndArray
+public class AndArray implements Array {
+    double[] elems;
+
+    public AndArray(double[] elems) {
+        this.elems = elems;
+    }
+
+    @Override
+    public double[] sum(double[] array) {
+        double[] tempArray1 = elems;
+        double[] tempArray2 = array;
+        double[] resultArray = new double[elems.length];
+
+        int k=0;
+
+        for (int i = 0; i < tempArray1.length; i++) {
+            for (int j = 0; j < tempArray2.length; j++) {
+                if(tempArray1[i]==tempArray2[j] && tempArray1[i]!=Double.POSITIVE_INFINITY&& tempArray2[j]!=Double.POSITIVE_INFINITY){
+
+                    resultArray[k]=tempArray1[i];
+
+                    k++;
+
+                    tempArray1[i]=Double.POSITIVE_INFINITY;
+                    tempArray2[j]=Double.POSITIVE_INFINITY;
+
+                }
+
+            }
+        }
+        double[] result=new double[k];
+        for (int i = 0; i < result.length; i++) {
+            result[i]=resultArray[i];
+        }
+        return result;
+    }
+
+    @Override
+    public void obrabotka() {
+        for (int i = 0; i < elems.length; i++) {
+            elems[i]=Math.sqrt(elems[i]);
+        }
+    }
+
+    @Override
+    public double[] getData() {
+        return elems;
+    }
+}
